@@ -1,0 +1,44 @@
+package core.web;
+
+import java.beans.PropertyEditorSupport;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
+/**
+ * @框架唯一的升级和技术支持地址：https://item.taobao.com/item.htm?spm=a230r.7195193.1997079397.8.wNJFq2&id=551763724593&abbucket=20
+ */
+public class CustomDateEditor extends PropertyEditorSupport {
+
+	public static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
+	public static final String DEFAULT_DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
+	public static final DateFormat[] ACCEPT_DATE_FORMATS = { new SimpleDateFormat(DEFAULT_DATETIME_FORMAT), new SimpleDateFormat(DEFAULT_DATE_FORMAT) };
+
+	/**
+	 * Parse the Date from the given text, using the specified DateFormat.
+	 */
+	@Override
+	public void setAsText(String text) throws IllegalArgumentException {
+		if (text == null || text.trim().equals(""))
+			setValue(null);
+		for (DateFormat format : ACCEPT_DATE_FORMATS) {
+			try {
+				setValue(format.parse(text));
+				return;
+			} catch (ParseException e) {
+				continue;
+			} catch (RuntimeException e) {
+				continue;
+			}
+		}
+	}
+
+	/**
+	 * Format the Date as String, using the specified DateFormat.
+	 */
+	@Override
+	public String getAsText() {
+		return (String) getValue();
+	}
+
+}
